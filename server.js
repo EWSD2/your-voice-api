@@ -38,6 +38,10 @@ export default (async function() {
         const server = new ApolloServer({
             typeDefs,
             resolvers,
+            formatError: err => ({
+                name: err.name,
+                message: err.message.replace('Context creation failed:', '')
+            }),
             context: {
                 User
             }
