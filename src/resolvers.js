@@ -45,6 +45,22 @@ export default {
             const user = await User.findOne({ username: currentUser.username })
 
             return user
+        },
+
+        getUserById: async ( _, { userId }, { User } ) => {
+            const user = await User.findOne({ _id: userId })
+
+            if ( !user ) {
+                throw new Error( 'User not found' )
+            }
+
+            return user
+        },
+
+        getFacultyStudents: async ( _, { faculty }, { User } ) => {
+            const students = User.find({ role: 'student', faculty: faculty })
+
+            return students
         }
     },
 
@@ -85,6 +101,27 @@ export default {
             return {
                 token: createToken( user, process.env.SECRET, '3hr' )
             }
+        },
+
+        updateUser: async ( _, { userId, firstName, lastName, faculty }, { User } ) => {
+            const user = await User.findOneAndUpdate(
+                // Find user by _id
+                { _id: userId },
+                {
+                    // Update the found user with the specified details
+                    $set: {
+                        firstName,
+                        lastName,
+                        faculty
+                    }
+                },
+                {
+                    // Instruct Mongoose to return the document after the update
+                    new: true
+                }
+            )
+
+            return user
         }
     }
 }

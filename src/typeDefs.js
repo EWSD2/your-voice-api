@@ -40,6 +40,8 @@ export default gql`
     type Query {
         hello: String!
         getCurrentUser: User
+        getUserById(userId: ID!): User
+        getFacultyStudents(faculty: String!): [User]
     }
     type Mutation {
         createUser(
@@ -49,6 +51,13 @@ export default gql`
             role: String!,
             faculty: String!
         ): Token
+
+        updateUser(
+            userId: ID!
+            firstName: String,
+            lastName: String,
+            faculty: String
+        ): User
 
         signinUser(
             username: String!,
