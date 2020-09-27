@@ -1,8 +1,8 @@
 import { ApolloServer } from 'apollo-server'
+require('dotenv').config()
 
 const mongoose = require('mongoose');
 
-require('dotenv').config()
 // Import typeDefs and resolvers
 import typeDefs from './src/typeDefs'
 import resolvers from './src/resolvers'
