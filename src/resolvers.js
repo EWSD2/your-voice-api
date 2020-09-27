@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken')
+const bcrypt = require('bcrypt')
 
 /**
  * Generate a JWT that contains the username and email of the currently logged
@@ -39,7 +40,7 @@ export default {
 
     Mutation: {
         createUser: async ( _, { username, email, password, role, faculty }, { User } ) => {
-            const user = await User.findOne({ username: username })
+            const user = await User.findOne({ username })
 
             if ( user ) {
                 throw new Error('User already exists')
@@ -55,6 +56,24 @@ export default {
 
             return {
                 token: createToken( newUser, process.env.SECRET, '3hr' )
+            }
+        },
+
+        signinUser: async ( _, { username, password }, { User } ) => {
+            const user = await User.findOne({ username })
+
+            if ( !user ) {
+                throw new Error( 'User not found.' )
+            }
+
+            const isValidPassword = await bcrypt.compare( password, user.password )
+
+            if ( !isValidPassword ) {
+                throw new Error( 'Invalid password.' )
+            }
+
+            return {
+                token: createToken( user, process.env.SECRET, '3hr' )
             }
         }
     }

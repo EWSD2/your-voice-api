@@ -48,5 +48,10 @@ export default gql`
             role: String!,
             faculty: String!
         ): Token
+
+        signinUser(
+            username: String!,
+            password: String!
+        ): Token
     }
 `
