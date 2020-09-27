@@ -39,6 +39,7 @@ export default gql`
 
     type Query {
         hello: String!
+        getCurrentUser: User
     }
     type Mutation {
         createUser(
