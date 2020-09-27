@@ -1,11 +1,27 @@
 import { ApolloServer } from 'apollo-server'
+const jwt = require('jsonwebtoken')
+
+// Import environment variables and Mongoose Models
 require('dotenv').config()
+const User = require('./src/models/User')
+
 
 const mongoose = require('mongoose');
 
 // Import typeDefs and resolvers
 import typeDefs from './src/typeDefs'
 import resolvers from './src/resolvers'
+
+// Verify client-side JWT Token
+const getUser = async ( token ) => {
+    if ( token ) {
+        try {
+            return await jwt.verify( token, process.env.SECRET )
+        } catch ( err ) {
+            console.error( err );
+        }
+    }
+}
 
 export default (async function() {
     try {
@@ -21,7 +37,10 @@ export default (async function() {
 
         const server = new ApolloServer({
             typeDefs,
-            resolvers
+            resolvers,
+            context: {
+                User
+            }
         })
 
         server.listen().then(({ url }) => {
