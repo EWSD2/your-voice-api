@@ -1,4 +1,4 @@
-import { ApolloServer } from 'apollo-server'
+import { ApolloServer, AuthenticationError } from 'apollo-server'
 const jwt = require('jsonwebtoken')
 
 // Import environment variables and Mongoose Models
@@ -18,7 +18,7 @@ const getUser = async ( token ) => {
         try {
             return await jwt.verify( token, process.env.SECRET )
         } catch ( err ) {
-            console.error( err );
+            throw new AuthenticationError('Your session has ended. Please sign in again')
         }
     }
 }
@@ -42,8 +42,12 @@ export default (async function() {
                 name: err.name,
                 message: err.message.replace('Context creation failed:', '')
             }),
-            context: {
-                User
+            context: async ({ req }) => {
+                const token = req.headers['authorization']
+                return {
+                    User,
+                    currentUser: await getUser( token )
+                }
             }
         })
 
