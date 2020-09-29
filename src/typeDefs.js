@@ -26,6 +26,13 @@ export default gql`
         token: String!
     }
 
+    type File {
+        id: ID!
+        filename: String!
+        mimetype: String!
+        path: String!
+    }
+
     type AcademicYear{
         _id: ID
         title: String!

@@ -1,10 +1,11 @@
 import { ApolloServer, AuthenticationError } from 'apollo-server'
-const jwt = require('jsonwebtoken')
+const jwt = require( 'jsonwebtoken' )
 
 // Import environment variables and Mongoose Models
 require('dotenv').config()
-const User = require('./src/models/User')
-const AcademicYear = require('./src/models/AcademicYear')
+const User = require( './src/models/User' )
+const AcademicYear = require( './src/models/AcademicYear' )
+const File = require( './src/models/File' )
 
 const mongoose = require('mongoose');
 
@@ -18,7 +19,7 @@ const getUser = async ( token ) => {
         try {
             return await jwt.verify( token, process.env.SECRET )
         } catch ( err ) {
-            throw new AuthenticationError('Your session has ended. Please sign in again')
+            throw new AuthenticationError( 'Your session has ended. Please sign in again' )
         }
     }
 }
@@ -33,27 +34,28 @@ export default (async function() {
                 useNewUrlParser: true
             }
         )
-        .then(() => console.log("Connected 🚀 To MongoDB Successfully"))
+        .then( () => console.log( 'Connected 🚀 To MongoDB Successfully' ))
 
         const server = new ApolloServer({
             typeDefs,
             resolvers,
             formatError: err => ({
                 name: err.name,
-                message: err.message.replace('Context creation failed:', '')
+                message: err.message.replace( 'Context creation failed:', '' )
             }),
             context: async ({ req }) => {
-                const token = req.headers['authorization']
+                const token = req.headers[ 'authorization' ]
                 return {
                     User,
                     AcademicYear,
+                    File,
                     currentUser: await getUser( token )
                 }
             }
         })
 
         server.listen().then(({ url }) => {
-            console.log(`🚀 server running @ ${ url }`)
+            console.log( `🚀 server running @ ${ url }` )
         })
     } catch ( err ) {
         console.error( err );
