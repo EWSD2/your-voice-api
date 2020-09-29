@@ -7,6 +7,7 @@ export default gql`
         MANAGER
         COORDINATOR
         GUEST
+        DEV
     }
 
     enum Faculty{

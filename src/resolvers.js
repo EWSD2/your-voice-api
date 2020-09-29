@@ -18,13 +18,14 @@ export default {
     UserRole: {
         ADMIN: 'admin',
         COORDINATOR: 'coordinator',
+        DEV: 'developer',
         MANAGER: 'manager',
         STUDENT: 'student'
     },
 
     YearStatus: {
-        OPEN: 'open',
-        CLOSED: 'closed'
+        CLOSED: 'closed',
+        OPEN: 'open'
     },
 
     Faculty: {
