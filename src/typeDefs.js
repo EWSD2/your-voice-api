@@ -26,6 +26,13 @@ export default gql`
         token: String!
     }
 
+    type SubmissionMessage{
+        _id: ID
+        messageBody: String!
+        messageDate: String
+        messageUser: User!
+    }
+
     type File {
         id: ID!
         filename: String!
@@ -52,6 +59,20 @@ export default gql`
         avatar: String
         role: UserRole!
         faculty: Faculty!
+    }
+
+    type Submission{
+        _id: ID
+        title: String!
+        submittedBy: User!
+        createdDate: String!
+        editDate: String
+        toBePublished: Boolean
+        isSubmitted: Boolean
+        academicYear: AcademicYear!
+        article: File!
+        pictures: [File]
+        messages: [SubmissionMessage]
     }
 
     type Query {
