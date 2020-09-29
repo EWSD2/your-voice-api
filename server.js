@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken')
 // Import environment variables and Mongoose Models
 require('dotenv').config()
 const User = require('./src/models/User')
-
+const AcademicYear = require('./src/models/AcademicYear')
 
 const mongoose = require('mongoose');
 
@@ -46,6 +46,7 @@ export default (async function() {
                 const token = req.headers['authorization']
                 return {
                     User,
+                    AcademicYear,
                     currentUser: await getUser( token )
                 }
             }

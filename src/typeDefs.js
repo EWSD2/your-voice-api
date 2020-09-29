@@ -26,6 +26,15 @@ export default gql`
         token: String!
     }
 
+    type AcademicYear{
+        _id: ID
+        title: String!
+        startDate: String!
+        endDate: String!
+        submissionClose: String
+        status: YearStatus
+    }
+
     type User{
         _id: ID
         firstName: String
@@ -43,7 +52,10 @@ export default gql`
         getCurrentUser: User
         getUserById(userId: ID!): User
         getFacultyStudents(faculty: String!): [User]
+        getAcademicYears: [AcademicYear]
+        getAcademicYearById(yearId: ID!): AcademicYear
     }
+
     type Mutation {
         createUser(
             username: String!,
@@ -64,5 +76,26 @@ export default gql`
             username: String!,
             password: String!
         ): Token
+
+        createAcademicYear(
+            title: String!
+            startDate: String!
+            endDate: String!
+            submissionClose: String
+            status: String
+        ): AcademicYear!
+
+        editAcademicYearDates(
+            yearId: ID!
+            startDate: String!
+            endDate: String!
+            submissionClose: String!
+        ): AcademicYear!
+
+        editAcademicYearStatus(
+            yearId: ID!
+            status: String!
+        ): AcademicYear!
+
     }
 `

@@ -59,9 +59,21 @@ export default {
         },
 
         getFacultyStudents: async ( _, { faculty }, { User } ) => {
-            const students = User.find({ role: 'student', faculty: faculty })
+            const students = await User.find({ role: 'student', faculty: faculty })
 
             return students
+        },
+
+        getAcademicYears: async ( _, args, { AcademicYear } ) => {
+            const years = await AcademicYear.find({}).sort({ startDate: 'desc' })
+
+            return years
+        },
+
+        getAcademicYearById: async ( _, { yearId }, { AcademicYear } ) => {
+            const year = await AcademicYear.findOne({ _id: yearId })
+
+            return year
         }
     },
 
@@ -123,6 +135,63 @@ export default {
             )
 
             return user
+        },
+
+        createAcademicYear: async ( _, args, { AcademicYear } ) => {
+            let year = {
+                title: args.title,
+                startDate: args.startDate,
+                endDate: args.endDate
+            }
+
+            if ( args.submissionClose ) {
+                year.submissionClose = args.submissionClose
+            }
+
+            if ( args.status ) {
+                year.status = args.status
+            }
+
+            const newYear = await new AcademicYear( year ).save()
+
+            return newYear
+
+        },
+
+        editAcademicYearDates: async ( _, { yearId, startDate, endDate, submissionClose }, { AcademicYear } ) => {
+            const year = await AcademicYear.findOneAndUpdate(
+                // Find year by yearId
+                { _id: yearId },
+                // Update year with new info
+                {
+                    $set: {
+                        startDate,
+                        endDate,
+                        submissionClose
+                    }
+                },
+                // Capture the updated document
+                { new: true }
+            )
+
+            return year
+        },
+
+        editAcademicYearStatus: async ( _, { yearId, status }, { AcademicYear } ) => {
+            const year = await AcademicYear.findOneAndUpdate(
+                // Find year by yearId
+                { _id: yearId },
+                // Update the year status
+                {
+                    $set: {
+                        status
+                    }
+                },
+                // Capture the updated document
+                { new: true }
+            )
+
+            return year
         }
     }
 }
