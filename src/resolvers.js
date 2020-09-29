@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
+import { createWriteStream, mkdir } from 'fs'
 
 /**
  * Generate a JWT that contains the username and email of the currently logged
@@ -12,6 +13,24 @@ const createToken = ( user, secret, expiresIn ) => {
         secret,
         { expiresIn }
     )
+}
+
+const processUpload = async ( upload, username ) => {
+    const { createReadStream, filename, mimetype } = await upload
+    const stream = createReadStream()
+    const file = await storeUpload({ stream, filename, mimetype }, username)
+
+    return file
+}
+
+const storeUpload = async ( { stream, filename, mimetype }, username ) => {
+    const path = `submissions/${ username }/${ filename }`
+    // Write the file to the specified path
+    return new Promise(( resolve, reject ) => {
+        stream.pipe( createWriteStream( path ) )
+        .on( 'finish', () => resolve({ path, filename, mimetype }) )
+        .on( 'error', reject )
+    })
 }
 
 export default {
