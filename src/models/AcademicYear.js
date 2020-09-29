@@ -14,12 +14,12 @@ const AcademicYearSchema = new mongoose.Schema({
         required: true
     },
     submissionClose: {
-        type: Date,
-        required: true
+        type: Date
     },
     status: {
         type: String,
-        required: true
+        required: true,
+        default: "closed"
     }
 })
 
