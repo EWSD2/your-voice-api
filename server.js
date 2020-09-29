@@ -6,6 +6,7 @@ require('dotenv').config()
 const User = require( './src/models/User' )
 const AcademicYear = require( './src/models/AcademicYear' )
 const File = require( './src/models/File' )
+const Submission = require('./src/models/Submission')
 
 const mongoose = require('mongoose');
 
@@ -49,6 +50,7 @@ export default (async function() {
                     User,
                     AcademicYear,
                     File,
+                    Submission,
                     currentUser: await getUser( token )
                 }
             }
