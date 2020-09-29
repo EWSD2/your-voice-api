@@ -36,8 +36,6 @@ export default {
     },
 
     Query: {
-        hello: () => "AND SO IT BEGINS!!!",
-
         getCurrentUser: async ( _, args, { User, currentUser } ) => {
             if ( !currentUser ) {
                 return null

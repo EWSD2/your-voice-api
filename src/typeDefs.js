@@ -76,7 +76,6 @@ export default gql`
     }
 
     type Query {
-        hello: String!
         getCurrentUser: User
         getUserById(userId: ID!): User
         getFacultyStudents(faculty: String!): [User]
