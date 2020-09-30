@@ -65,7 +65,7 @@ export default {
             return user
         },
 
-        getUserById: async ( _, { userId }, { User } ) => {
+        getUser: async ( _, { userId }, { User } ) => {
             const user = await User.findOne({ _id: userId })
 
             if ( !user ) {
@@ -87,10 +87,37 @@ export default {
             return years
         },
 
-        getAcademicYearById: async ( _, { yearId }, { AcademicYear } ) => {
+        getAcademicYear: async ( _, { yearId }, { AcademicYear } ) => {
             const year = await AcademicYear.findOne({ _id: yearId })
 
             return year
+        },
+
+        getSubmission: async ( _, { submissionId }, { Submission } ) => {
+            const submission = await Submission.findOne({
+                _id: submissionId
+            }).populate(
+                'submittedBy academicYear article pictures messages.messageUser'
+            )
+
+            return submission
+        },
+
+        getFacultySubmissions: async ( _, { faculty }, { Submission } ) => {
+            const submissions = await Submission.find({ faculty })
+            .populate(
+                'submittedBy academicYear article pictures messages.messageUser'
+            )
+
+            return submissions
+        },
+
+        getPublicationSelections: async ( _, args, { Submission } ) => {
+            const submissions = await Submission.find({
+                toBePublished: true
+            }).populate(
+                'submittedBy academicYear article pictures messages.messageUser'
+            )
         }
     },
 
@@ -209,6 +236,33 @@ export default {
             )
 
             return year
+        },
+
+        makeSubmission: async ( _, { title, userId, username, createdDate, yearId, faculty, article }, { Submission, File } ) => {
+            /**
+             * Create a folder for the user in the submissions folder at the
+             * root of the directory
+             */
+            mkdir( `submissions/${ username }`, { recursive: true }, ( err ) => {
+                if ( err ) throw err
+            })
+
+            // Process the file upload
+            const articleUpload = await processUpload( article, username )
+
+            // Save the article details in a File document
+            const articleDetails = await new File( articleUpload ).save()
+
+            const newArticle = await new Submission({
+                title,
+                submittedBy: userId,
+                createdDate,
+                academicYear: yearId,
+                faculty,
+                article: articleDetails._id
+            }).save()
+
+            return newArticle
         }
     }
 }
