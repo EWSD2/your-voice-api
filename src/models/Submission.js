@@ -37,6 +37,10 @@ const SubmissionSchema = new mongoose.Schema({
         type: [ mongoose.Schema.Types.ObjectId ],
         ref: 'File'
     },
+    faculty: {
+        type: String,
+        required: true
+    },
     messages: [{
         messageBody: {
             type: String,
