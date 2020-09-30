@@ -34,7 +34,7 @@ export default gql`
     }
 
     type File {
-        id: ID!
+        _id: ID!
         filename: String!
         mimetype: String!
         path: String!
@@ -70,6 +70,7 @@ export default gql`
         toBePublished: Boolean
         isSubmitted: Boolean
         academicYear: AcademicYear!
+        faculty: Faculty!
         article: File!
         pictures: [File]
         messages: [SubmissionMessage]
@@ -77,10 +78,13 @@ export default gql`
 
     type Query {
         getCurrentUser: User
-        getUserById(userId: ID!): User
+        getUser(userId: ID!): User
         getFacultyStudents(faculty: String!): [User]
         getAcademicYears: [AcademicYear]
-        getAcademicYearById(yearId: ID!): AcademicYear
+        getAcademicYear(yearId: ID!): AcademicYear
+        getSubmission(submissionId: ID!): Submission
+        getFacultySubmissions(faculty: String!): [Submission]
+        getPublicationSelections: [Submission]
     }
 
     type Mutation {
@@ -97,7 +101,7 @@ export default gql`
             firstName: String,
             lastName: String,
             faculty: String
-        ): User
+        ): User!
 
         signinUser(
             username: String!,
@@ -123,6 +127,16 @@ export default gql`
             yearId: ID!
             status: String!
         ): AcademicYear!
+
+        makeSubmission(
+            title: String!
+            userId: ID!
+            username: String!
+            createdDate: String!
+            yearId: ID!
+            faculty: String!
+            article: Upload!
+        ): Submission
 
     }
 `
