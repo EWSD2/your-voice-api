@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "server": "nodemon -r esm server.js"
+    "server": "nodemon server.js"
   },
   "author": "Berhane-Hiwet La Rose",
   "license": "ISC",

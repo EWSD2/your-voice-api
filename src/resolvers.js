@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
-import { createWriteStream, mkdir } from 'fs'
+const { createWriteStream, mkdir } = require('fs')
 
 /**
  * Generate a JWT that contains the username and email of the currently logged
@@ -33,7 +33,7 @@ const storeUpload = async ( { stream, filename, mimetype }, username ) => {
     })
 }
 
-export default {
+module.exports = {
     UserRole: {
         ADMIN: 'admin',
         COORDINATOR: 'coordinator',
