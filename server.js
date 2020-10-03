@@ -1,5 +1,5 @@
-import { ApolloServer, AuthenticationError } from 'apollo-server'
-const jwt = require( 'jsonwebtoken' )
+const { ApolloServer, AuthenticationError } = require('apollo-server')
+const jwt = require('jsonwebtoken')
 
 // Import environment variables and Mongoose Models
 require('dotenv').config()
@@ -11,8 +11,8 @@ const Submission = require('./src/models/Submission')
 const mongoose = require('mongoose');
 
 // Import typeDefs and resolvers
-import typeDefs from './src/typeDefs'
-import resolvers from './src/resolvers'
+const typeDefs = require('./src/typeDefs')
+const resolvers = require('./src/resolvers')
 
 // Verify client-side JWT Token
 const getUser = async ( token ) => {
@@ -25,41 +25,40 @@ const getUser = async ( token ) => {
     }
 }
 
-export default (async function() {
-    try {
-        await mongoose.connect(
-            process.env.MONGO_URI,
-            {
-                useCreateIndex: true,
-                useUnifiedTopology: true,
-                useNewUrlParser: true
-            }
-        )
-        .then( () => console.log( 'Connected 🚀 To MongoDB Successfully' ))
-
-        const server = new ApolloServer({
-            typeDefs,
-            resolvers,
-            formatError: err => ({
-                name: err.name,
-                message: err.message.replace( 'Context creation failed:', '' )
-            }),
-            context: async ({ req }) => {
-                const token = req.headers[ 'authorization' ]
-                return {
-                    User,
-                    AcademicYear,
-                    File,
-                    Submission,
-                    currentUser: await getUser( token )
-                }
-            }
-        })
-
-        server.listen().then(({ url }) => {
-            console.log( `🚀 server running @ ${ url }` )
-        })
-    } catch ( err ) {
-        console.error( err );
+mongoose.connect(
+    process.env.MONGO_URI,
+    {
+        useCreateIndex: true,
+        useUnifiedTopology: true,
+        useNewUrlParser: true
     }
-})()
+)
+.then( () => console.log( 'Connected 🚀 To MongoDB Successfully' ))
+
+const server = new ApolloServer({
+    cors: {
+        origin: true,
+        credentials: true
+    },
+    typeDefs,
+    resolvers,
+    formatError: err => ({
+        name: err.name,
+        message: err.message.replace( 'Context creation failed:', '' )
+    }),
+    context: async ({ req }) => {
+        const token = req.headers[ 'authorization' ].slice(7)
+        return {
+            User,
+            AcademicYear,
+            File,
+            Submission,
+            currentUser: await getUser( token )
+        }
+    }
+})
+
+server.listen()
+.then(({ url }) => { console.log( `🚀 server running @ ${ url }` )})
+.catch ( err => { console.error( err ) })
+
