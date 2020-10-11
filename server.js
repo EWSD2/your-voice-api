@@ -25,6 +25,15 @@ const getUser = async ( token ) => {
     }
 }
 
+function getToken(header) {
+    let token = null
+    if (header) {
+        token = header.slice(7)
+    }
+
+    return token
+}
+
 mongoose.connect(
     process.env.MONGO_URI,
     {
@@ -36,6 +45,10 @@ mongoose.connect(
 .then( () => console.log( 'Connected 🚀 To MongoDB Successfully' ))
 
 const server = new ApolloServer({
+    cors: {
+        origin: true,
+        credentials: true
+    },
     typeDefs,
     resolvers,
     formatError: err => ({
@@ -43,7 +56,7 @@ const server = new ApolloServer({
         message: err.message.replace( 'Context creation failed:', '' )
     }),
     context: async ({ req }) => {
-        const token = req.headers[ 'authorization' ]
+        const token = getToken(req.headers[ 'authorization' ])
         return {
             User,
             AcademicYear,
