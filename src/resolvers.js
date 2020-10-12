@@ -97,7 +97,7 @@ module.exports = {
             const submission = await Submission.findOne({
                 _id: submissionId
             }).populate(
-                'submittedBy academicYear article pictures messages.messageUser'
+                'submittedBy academicYear article picture messages.messageUser'
             )
 
             return submission
@@ -106,7 +106,7 @@ module.exports = {
         getFacultySubmissions: async ( _, { faculty }, { Submission } ) => {
             const submissions = await Submission.find({ faculty })
             .populate(
-                'submittedBy academicYear article pictures messages.messageUser'
+                'submittedBy academicYear article picture messages.messageUser'
             )
 
             return submissions
@@ -116,7 +116,7 @@ module.exports = {
             const submissions = await Submission.find({
                 toBePublished: true
             }).populate(
-                'submittedBy academicYear article pictures messages.messageUser'
+                'submittedBy academicYear article picture messages.messageUser'
             )
         }
     },
@@ -238,7 +238,7 @@ module.exports = {
             return year
         },
 
-        makeSubmission: async ( _, { title, userId, username, createdDate, yearId, faculty, article }, { Submission, File } ) => {
+        makeSubmission: async ( _, { title, userId, username, createdDate, yearId, faculty, article, picture }, { Submission, File } ) => {
             /**
              * Create a folder for the user in the submissions folder at the
              * root of the directory
@@ -253,16 +253,28 @@ module.exports = {
             // Save the article details in a File document
             const articleDetails = await new File( articleUpload ).save()
 
-            const newArticle = await new Submission({
+            /**
+             ** Check if any pictures have been submitted and process their
+             ** uploading if they have
+             */
+            if ( picture ) {
+
+                const pictureUpload = await processUpload ( picture, username )
+                pictureDetails = await new File( pictureUpload ).save()
+                // console.log(pictureDetails)
+            }
+
+            const newSubmission = await new Submission({
                 title,
                 submittedBy: userId,
                 createdDate,
                 academicYear: yearId,
                 faculty,
-                article: articleDetails._id
+                article: articleDetails._id,
+                picture: pictureDetails._id
             }).save()
 
-            return newArticle
+            return newSubmission
         }
     }
 }

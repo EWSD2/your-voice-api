@@ -1,7 +1,7 @@
 const { gql } = require('apollo-server')
 
 module.exports = gql`
-    enum UserRole{
+    enum UserRole {
         STUDENT
         ADMIN
         MANAGER
@@ -10,23 +10,23 @@ module.exports = gql`
         DEV
     }
 
-    enum Faculty{
+    enum Faculty {
         HUMANITIES
         MATHEMATICS
         COMPSCI
         ADMIN
     }
 
-    enum YearStatus{
+    enum YearStatus {
         CLOSED
         OPEN
     }
 
-    type Token{
+    type Token {
         token: String!
     }
 
-    type SubmissionMessage{
+    type SubmissionMessage {
         _id: ID
         messageBody: String!
         messageDate: String
@@ -34,13 +34,13 @@ module.exports = gql`
     }
 
     type File {
-        _id: ID!
+        _id: ID
         filename: String!
         mimetype: String!
         path: String!
     }
 
-    type AcademicYear{
+    type AcademicYear {
         _id: ID
         title: String!
         startDate: String!
@@ -49,7 +49,7 @@ module.exports = gql`
         status: YearStatus
     }
 
-    type User{
+    type User {
         _id: ID
         firstName: String
         lastName: String
@@ -61,7 +61,7 @@ module.exports = gql`
         faculty: Faculty!
     }
 
-    type Submission{
+    type Submission {
         _id: ID
         title: String!
         submittedBy: User!
@@ -72,7 +72,7 @@ module.exports = gql`
         academicYear: AcademicYear!
         faculty: Faculty!
         article: File!
-        pictures: [File]
+        picture: File
         messages: [SubmissionMessage]
     }
 
@@ -136,6 +136,7 @@ module.exports = gql`
             yearId: ID!
             faculty: String!
             article: Upload!
+            picture: Upload
         ): Submission
 
     }

@@ -33,8 +33,8 @@ const SubmissionSchema = new mongoose.Schema({
         ref: 'File',
         required: true
     },
-    pictures: {
-        type: [ mongoose.Schema.Types.ObjectId ],
+    picture: {
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'File'
     },
     faculty: {
