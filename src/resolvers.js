@@ -109,6 +109,15 @@ module.exports = {
             return submission
         },
 
+        getUserSubmissions: async ( _, { userId }, { Submission } ) => {
+            const submissions = await Submission.find({ submittedBy: userId })
+            .populate(
+                'submittedBy academicYear article picture messages.messageUser'
+            )
+
+            return submissions
+        },
+
         getFacultySubmissions: async ( _, { faculty }, { Submission } ) => {
             const submissions = await Submission.find({ faculty })
             .populate(
@@ -124,6 +133,8 @@ module.exports = {
             }).populate(
                 'submittedBy academicYear article picture messages.messageUser'
             )
+
+            return submissions
         }
     },
 
