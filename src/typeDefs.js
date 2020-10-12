@@ -82,6 +82,7 @@ module.exports = gql`
         getFacultyStudents(faculty: String!): [User]
         getAcademicYears: [AcademicYear]
         getAcademicYear(yearId: ID!): AcademicYear
+        getOpenAcademicYears: [AcademicYear]
         getSubmission(submissionId: ID!): Submission
         getFacultySubmissions(faculty: String!): [Submission]
         getPublicationSelections: [Submission]

@@ -93,6 +93,12 @@ module.exports = {
             return year
         },
 
+        getOpenAcademicYears: async ( _, args, { AcademicYear } ) => {
+            const years = await AcademicYear.find({ status: 'open' })
+
+            return years
+        },
+
         getSubmission: async ( _, { submissionId }, { Submission } ) => {
             const submission = await Submission.findOne({
                 _id: submissionId
