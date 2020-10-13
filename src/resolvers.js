@@ -255,8 +255,7 @@ module.exports = {
             return year
         },
 
-        makeSubmission: async ( _, { title, userId, username, createdDate, yearId, faculty, article, picture }, { Submission, File, storage } ) => {
-            const storageRef = storage.bucket('ewsd-your-voice.appspot.com').upload(article, { gzip: true })
+        makeSubmission: async ( _, { title, userId, username, createdDate, yearId, faculty, article, picture }, { Submission, File } ) => {
             /**
              * Create a folder for the user in the submissions folder at the
              * root of the directory
