@@ -255,7 +255,8 @@ module.exports = {
             return year
         },
 
-        makeSubmission: async ( _, { title, userId, username, createdDate, yearId, faculty, article, picture }, { Submission, File } ) => {
+        makeSubmission: async ( _, { title, userId, username, createdDate, yearId, faculty, article, picture }, { Submission, File, storage } ) => {
+            const storageRef = storage.bucket('ewsd-your-voice.appspot.com').upload(article, { gzip: true })
             /**
              * Create a folder for the user in the submissions folder at the
              * root of the directory
@@ -274,22 +275,23 @@ module.exports = {
              ** Check if any pictures have been submitted and process their
              ** uploading if they have
              */
-            if ( picture ) {
-
-                const pictureUpload = await processUpload ( picture, username )
-                pictureDetails = await new File( pictureUpload ).save()
-                // console.log(pictureDetails)
-            }
-
-            const newSubmission = await new Submission({
+            let submission = {
                 title,
                 submittedBy: userId,
                 createdDate,
                 academicYear: yearId,
                 faculty,
                 article: articleDetails._id,
-                picture: pictureDetails._id
-            }).save()
+            }
+
+            if ( picture ) {
+
+                const pictureUpload = await processUpload ( picture, username )
+                const pictureDetails = await new File( pictureUpload ).save()
+                submission.picture = pictureDetails._id
+            }
+
+            const newSubmission = await new Submission(submission).save()
 
             return newSubmission
         }

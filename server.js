@@ -1,3 +1,36 @@
+// Configure and instantiate Firebase Storage
+const admin = require('firebase-admin')
+const serviceAccount = require('./ewsd-your-voice-firebase-adminsdk.json')
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://ewsd-your-voice.firebaseio.com",
+  storageBucket: 'gs://ewsd-your-voice.appspot.com'
+});
+
+// let bucket = admin.storage().bucket()
+const { Storage } = require('@google-cloud/storage')
+
+const storage = new Storage()
+
+// Makes an authenticated API request.
+async function listBuckets() {
+    try {
+      const results = await storage.getBuckets();
+
+      const [buckets] = results;
+
+      console.log('Buckets:');
+      buckets.forEach((bucket) => {
+        console.log(bucket.name);
+      });
+    } catch (err) {
+      console.error('ERROR:', err);
+    }
+  }
+
+  listBuckets();
+
 const { ApolloServer, AuthenticationError } = require('apollo-server')
 const jwt = require('jsonwebtoken')
 
@@ -62,6 +95,7 @@ const server = new ApolloServer({
             AcademicYear,
             File,
             Submission,
+            storage,
             currentUser: await getUser( token )
         }
     }
