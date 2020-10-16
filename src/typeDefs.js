@@ -22,6 +22,13 @@ module.exports = gql`
         OPEN
     }
 
+    input MediaInput {
+        _id: ID
+        filename: String!
+        mimetype: String!
+        path: String!
+    }
+
     type Token {
         token: String!
     }
@@ -72,7 +79,7 @@ module.exports = gql`
         academicYear: AcademicYear!
         faculty: Faculty!
         article: File!
-        picture: File
+        pictures: [File]
         messages: [SubmissionMessage]
     }
 
@@ -133,12 +140,11 @@ module.exports = gql`
         makeSubmission(
             title: String!
             userId: ID!
-            username: String!
             createdDate: String!
             yearId: ID!
             faculty: String!
-            article: Upload!
-            picture: Upload
+            article: MediaInput!
+            pictures: [MediaInput]
         ): Submission
 
     }

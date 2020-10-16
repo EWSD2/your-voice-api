@@ -29,14 +29,33 @@ const SubmissionSchema = new mongoose.Schema({
         required: true
     },
     article: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'File',
-        required: true
+        filename: {
+            type: String,
+            required: true
+        },
+        mimetype: {
+            type: String,
+            required: true
+        },
+        path: {
+            type: String,
+            required: true
+        }
     },
-    picture: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'File'
-    },
+    pictures: [{
+        filename: {
+            type: String,
+            required: true
+        },
+        mimetype: {
+            type: String,
+            required: true
+        },
+        path: {
+            type: String,
+            required: true
+        }
+    }],
     faculty: {
         type: String,
         required: true

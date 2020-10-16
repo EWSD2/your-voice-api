@@ -5,7 +5,6 @@ const jwt = require('jsonwebtoken')
 require('dotenv').config()
 const User = require( './src/models/User' )
 const AcademicYear = require( './src/models/AcademicYear' )
-const File = require( './src/models/File' )
 const Submission = require('./src/models/Submission')
 
 const mongoose = require('mongoose');
@@ -60,7 +59,6 @@ const server = new ApolloServer({
         return {
             User,
             AcademicYear,
-            File,
             Submission,
             currentUser: await getUser( token )
         }

@@ -255,20 +255,20 @@ module.exports = {
             return year
         },
 
-        makeSubmission: async ( _, { title, userId, username, createdDate, yearId, faculty, article, picture }, { Submission, File } ) => {
+        makeSubmission: async ( _, { title, userId, createdDate, yearId, faculty, article, pictures }, { Submission } ) => {
             /**
              * Create a folder for the user in the submissions folder at the
              * root of the directory
              */
-            mkdir( `submissions/${ username }`, { recursive: true }, ( err ) => {
-                if ( err ) throw err
-            })
+            // mkdir( `submissions/${ username }`, { recursive: true }, ( err ) => {
+            //     if ( err ) throw err
+            // })
 
             // Process the file upload
-            const articleUpload = await processUpload( article, username )
+            // const articleUpload = await processUpload( article, username )
 
             // Save the article details in a File document
-            const articleDetails = await new File( articleUpload ).save()
+            // const articleDetails = await new File( articleUpload ).save()
 
             /**
              ** Check if any pictures have been submitted and process their
@@ -280,14 +280,11 @@ module.exports = {
                 createdDate,
                 academicYear: yearId,
                 faculty,
-                article: articleDetails._id,
+                article: article
             }
 
-            if ( picture ) {
-
-                const pictureUpload = await processUpload ( picture, username )
-                const pictureDetails = await new File( pictureUpload ).save()
-                submission.picture = pictureDetails._id
+            if ( pictures ) {
+                submission.pictures = pictures
             }
 
             const newSubmission = await new Submission(submission).save()
