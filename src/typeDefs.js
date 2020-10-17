@@ -79,7 +79,7 @@ module.exports = gql`
         academicYear: AcademicYear!
         faculty: Faculty!
         article: File!
-        pictures: [File]
+        picture: File
         messages: [SubmissionMessage]
     }
 
@@ -144,7 +144,7 @@ module.exports = gql`
             yearId: ID!
             faculty: String!
             article: MediaInput!
-            pictures: [MediaInput]
+            picture: MediaInput
         ): Submission
 
     }

@@ -42,7 +42,7 @@ const SubmissionSchema = new mongoose.Schema({
             required: true
         }
     },
-    pictures: [{
+    picture: {
         filename: {
             type: String,
             required: true
@@ -55,7 +55,7 @@ const SubmissionSchema = new mongoose.Schema({
             type: String,
             required: true
         }
-    }],
+    },
     faculty: {
         type: String,
         required: true

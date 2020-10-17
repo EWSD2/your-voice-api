@@ -103,7 +103,7 @@ module.exports = {
             const submission = await Submission.findOne({
                 _id: submissionId
             }).populate(
-                'submittedBy academicYear article picture messages.messageUser'
+                'submittedBy academicYear messages.messageUser'
             )
 
             return submission
@@ -112,7 +112,7 @@ module.exports = {
         getUserSubmissions: async ( _, { userId }, { Submission } ) => {
             const submissions = await Submission.find({ submittedBy: userId })
             .populate(
-                'submittedBy academicYear article picture messages.messageUser'
+                'submittedBy academicYear messages.messageUser'
             )
 
             return submissions
@@ -121,7 +121,7 @@ module.exports = {
         getFacultySubmissions: async ( _, { faculty }, { Submission } ) => {
             const submissions = await Submission.find({ faculty })
             .populate(
-                'submittedBy academicYear article picture messages.messageUser'
+                'submittedBy academicYear messages.messageUser'
             )
 
             return submissions
@@ -131,7 +131,7 @@ module.exports = {
             const submissions = await Submission.find({
                 toBePublished: true
             }).populate(
-                'submittedBy academicYear article picture messages.messageUser'
+                'submittedBy academicYear messages.messageUser'
             )
 
             return submissions
@@ -255,7 +255,7 @@ module.exports = {
             return year
         },
 
-        makeSubmission: async ( _, { title, userId, createdDate, yearId, faculty, article, pictures }, { Submission } ) => {
+        makeSubmission: async ( _, { title, userId, createdDate, yearId, faculty, article, picture }, { Submission } ) => {
             /**
              * Create a folder for the user in the submissions folder at the
              * root of the directory
@@ -283,8 +283,8 @@ module.exports = {
                 article: article
             }
 
-            if ( pictures ) {
-                submission.pictures = pictures
+            if ( picture ) {
+                submission.picture = picture
             }
 
             const newSubmission = await new Submission(submission).save()
