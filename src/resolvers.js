@@ -76,6 +76,15 @@ module.exports = {
             return user
         },
 
+        getFacultyCoordinator: async ( _, { faculty }, { User } ) => {
+            const user = await User.findOne({
+                faculty,
+                role: "coordinator"
+            })
+
+            return user
+        },
+
         getFacultyStudents: async ( _, { faculty }, { User } ) => {
             const students = await User.find({ role: 'student', faculty: faculty })
 

@@ -86,6 +86,7 @@ module.exports = gql`
     type Query {
         getCurrentUser: User
         getUser(userId: ID!): User
+        getFacultyCoordinator(faculty: String!): User
         getFacultyStudents(faculty: String!): [User]
         getAcademicYears: [AcademicYear]
         getAcademicYear(yearId: ID!): AcademicYear
