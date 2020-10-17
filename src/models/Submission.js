@@ -44,16 +44,13 @@ const SubmissionSchema = new mongoose.Schema({
     },
     picture: {
         filename: {
-            type: String,
-            required: true
+            type: String
         },
         mimetype: {
-            type: String,
-            required: true
+            type: String
         },
         path: {
-            type: String,
-            required: true
+            type: String
         }
     },
     faculty: {
