@@ -42,9 +42,9 @@ module.exports = gql`
 
     type File {
         _id: ID
-        filename: String!
-        mimetype: String!
-        path: String!
+        filename: String
+        mimetype: String
+        path: String
     }
 
     type AcademicYear {
