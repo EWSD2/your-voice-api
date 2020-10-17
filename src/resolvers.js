@@ -38,6 +38,7 @@ module.exports = {
         ADMIN: 'admin',
         COORDINATOR: 'coordinator',
         DEV: 'developer',
+        GUEST: 'guest',
         MANAGER: 'manager',
         STUDENT: 'student'
     },
