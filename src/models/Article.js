@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const SubmissionSchema = new mongoose.Schema({
+const ArticleSchema = new mongoose.Schema({
     title: {
         type: String,
         required: true
@@ -73,4 +73,4 @@ const SubmissionSchema = new mongoose.Schema({
     }]
 })
 
-module.exports = mongoose.model('Submission', SubmissionSchema)
+module.exports = mongoose.model('Article', ArticleSchema)
