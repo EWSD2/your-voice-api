@@ -109,42 +109,42 @@ module.exports = {
             return years
         },
 
-        getSubmission: async ( _, { submissionId }, { Submission } ) => {
-            const submission = await Submission.findOne({
-                _id: submissionId
+        getArticle: async ( _, { articleId }, { Article } ) => {
+            const article = await Article.findOne({
+                _id: articleId
             }).populate(
                 'submittedBy academicYear messages.messageUser'
             )
 
-            return submission
+            return article
         },
 
-        getUserSubmissions: async ( _, { userId }, { Submission } ) => {
-            const submissions = await Submission.find({ submittedBy: userId })
+        getUserArticles: async ( _, { userId }, { Article } ) => {
+            const articles = await Article.find({ submittedBy: userId })
             .populate(
                 'submittedBy academicYear messages.messageUser'
             )
 
-            return submissions
+            return articles
         },
 
-        getFacultySubmissions: async ( _, { faculty }, { Submission } ) => {
-            const submissions = await Submission.find({ faculty })
+        getFacultyArticles: async ( _, { faculty }, { Article } ) => {
+            const articles = await Article.find({ faculty })
             .populate(
                 'submittedBy academicYear messages.messageUser'
             )
 
-            return submissions
+            return articles
         },
 
-        getPublicationSelections: async ( _, args, { Submission } ) => {
-            const submissions = await Submission.find({
+        getPublicationSelections: async ( _, args, { Article } ) => {
+            const articles = await Article.find({
                 toBePublished: true
             }).populate(
                 'submittedBy academicYear messages.messageUser'
             )
 
-            return submissions
+            return articles
         }
     },
 
@@ -265,8 +265,8 @@ module.exports = {
             return year
         },
 
-        makeSubmission: async ( _, { title, userId, createdDate, yearId, faculty, article, picture }, { Submission } ) => {
-            let submission = {
+        createArticle: async ( _, { title, userId, createdDate, yearId, faculty, article, picture }, { Article } ) => {
+            let newArticle = {
                 title,
                 submittedBy: userId,
                 createdDate,
@@ -276,18 +276,18 @@ module.exports = {
             }
 
             if ( picture ) {
-                submission.picture = picture
+                newArticle.picture = picture
             }
 
-            const newSubmission = await new Submission(submission).save()
+            const newSubmission = await new Article(newArticle).save()
 
             return newSubmission
         },
 
-        pushSubmission: async (_, { submissionId }, { Submission }) => {
-            const submission = await Submission.findOneAndUpdate(
+        submitArticle: async (_, { articleId }, { Article }) => {
+            const article = await Article.findOneAndUpdate(
                 // Find Submission by submissionId
-                { _id: submissionId },
+                { _id: articleId },
                 // Update the Submission status
                 {
                     $set: {
@@ -298,7 +298,7 @@ module.exports = {
                 { new: true }
             )
 
-            return submission
+            return article
         }
     }
 }

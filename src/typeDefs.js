@@ -33,7 +33,7 @@ module.exports = gql`
         token: String!
     }
 
-    type SubmissionMessage {
+    type ArticleMessage {
         _id: ID
         messageBody: String!
         messageDate: String
@@ -68,7 +68,7 @@ module.exports = gql`
         faculty: Faculty!
     }
 
-    type Submission {
+    type Article {
         _id: ID
         title: String!
         submittedBy: User!
@@ -80,7 +80,7 @@ module.exports = gql`
         faculty: Faculty!
         article: File!
         picture: File
-        messages: [SubmissionMessage]
+        messages: [ArticleMessage]
     }
 
     type Query {
@@ -91,10 +91,10 @@ module.exports = gql`
         getAcademicYears: [AcademicYear]
         getAcademicYear(yearId: ID!): AcademicYear
         getOpenAcademicYears: [AcademicYear]
-        getSubmission(submissionId: ID!): Submission
-        getUserSubmissions(userId: ID!): [Submission]
-        getFacultySubmissions(faculty: String!): [Submission]
-        getPublicationSelections: [Submission]
+        getArticle(articleId: ID!): Article
+        getUserArticles(userId: ID!): [Article]
+        getFacultyArticles(faculty: String!): [Article]
+        getPublicationSelections: [Article]
     }
 
     type Mutation {
@@ -138,7 +138,7 @@ module.exports = gql`
             status: String!
         ): AcademicYear!
 
-        makeSubmission(
+        createArticle(
             title: String!
             userId: ID!
             createdDate: String!
@@ -146,8 +146,8 @@ module.exports = gql`
             faculty: String!
             article: MediaInput!
             picture: MediaInput
-        ): Submission
+        ): Article
 
-        pushSubmission(submissionId: ID!): Submission
+        submitArticle(articleId: ID!): Article
     }
 `
