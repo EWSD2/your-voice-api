@@ -266,24 +266,6 @@ module.exports = {
         },
 
         makeSubmission: async ( _, { title, userId, createdDate, yearId, faculty, article, picture }, { Submission } ) => {
-            /**
-             * Create a folder for the user in the submissions folder at the
-             * root of the directory
-             */
-            // mkdir( `submissions/${ username }`, { recursive: true }, ( err ) => {
-            //     if ( err ) throw err
-            // })
-
-            // Process the file upload
-            // const articleUpload = await processUpload( article, username )
-
-            // Save the article details in a File document
-            // const articleDetails = await new File( articleUpload ).save()
-
-            /**
-             ** Check if any pictures have been submitted and process their
-             ** uploading if they have
-             */
             let submission = {
                 title,
                 submittedBy: userId,
@@ -300,6 +282,23 @@ module.exports = {
             const newSubmission = await new Submission(submission).save()
 
             return newSubmission
+        },
+
+        pushSubmission: async (_, { submissionId }, { Submission }) => {
+            const submission = await Submission.findOneAndUpdate(
+                // Find Submission by submissionId
+                { _id: submissionId },
+                // Update the Submission status
+                {
+                    $set: {
+                        isSubmitted: true
+                    }
+                },
+                // Capture the updated document
+                { new: true }
+            )
+
+            return submission
         }
     }
 }

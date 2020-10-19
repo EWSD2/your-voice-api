@@ -148,5 +148,6 @@ module.exports = gql`
             picture: MediaInput
         ): Submission
 
+        pushSubmission(submissionId: ID!): Submission
     }
 `
