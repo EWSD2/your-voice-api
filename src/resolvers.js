@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const { createWriteStream, mkdir } = require('fs')
+const sgMail = require('@sendgrid/mail')
+sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
 /**
  * Generate a JWT that contains the username and email of the currently logged
@@ -52,7 +54,7 @@ module.exports = {
         ADMIN: 'admin',
         COMPSCI: 'compsci',
         HUMANITIES: 'humanities',
-        MATHEMATICS: 'math'
+        MATHEMATICS: 'mathematics'
     },
 
     Query: {
@@ -284,7 +286,7 @@ module.exports = {
             return newSubmission
         },
 
-        submitArticle: async (_, { articleId }, { Article }) => {
+        submitArticle: async (_, { articleId, username, faculty }, { Article, User }) => {
             const article = await Article.findOneAndUpdate(
                 // Find Submission by submissionId
                 { _id: articleId },
@@ -297,6 +299,29 @@ module.exports = {
                 // Capture the updated document
                 { new: true }
             )
+
+            const coordinator = await User.findOne({
+                faculty,
+                role: "coordinator"
+            })
+
+            const msg = {
+                to: coordinator.email,
+                from: 'yourvoicecoordinator@gmail.com',
+                templateId: 'd-8b800d5dec214a008492d3e92b9a96c0',
+                dynamicTemplateData: {
+                    name: coordinator.firstName,
+                    student: username
+                }
+            }
+
+            (async () => {
+                try {
+                    await sgMail.send(msg)
+                } catch (err) {
+                    console.error(err)
+                }
+            })()
 
             return article
         }
