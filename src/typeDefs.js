@@ -148,6 +148,10 @@ module.exports = gql`
             picture: MediaInput
         ): Article
 
-        submitArticle(articleId: ID!): Article
+        submitArticle(
+            articleId: ID!
+            username: String!
+            faculty: String!
+        ): Article
     }
 `
