@@ -1,8 +1,8 @@
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
-const { createWriteStream, mkdir } = require('fs')
 const sgMail = require('@sendgrid/mail')
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
+require('dotenv').config({ path: __dirname + '../.env'})
 
 /**
  * Generate a JWT that contains the username and email of the currently logged
@@ -15,24 +15,6 @@ const createToken = ( user, secret, expiresIn ) => {
         secret,
         { expiresIn }
     )
-}
-
-const processUpload = async ( upload, username ) => {
-    const { createReadStream, filename, mimetype } = await upload
-    const stream = createReadStream()
-    const file = await storeUpload({ stream, filename, mimetype }, username)
-
-    return file
-}
-
-const storeUpload = async ( { stream, filename, mimetype }, username ) => {
-    const path = `submissions/${ username }/${ filename }`
-    // Write the file to the specified path
-    return new Promise(( resolve, reject ) => {
-        stream.pipe( createWriteStream( path ) )
-        .on( 'finish', () => resolve({ path, filename, mimetype }) )
-        .on( 'error', reject )
-    })
 }
 
 module.exports = {
@@ -311,17 +293,11 @@ module.exports = {
                 templateId: 'd-8b800d5dec214a008492d3e92b9a96c0',
                 dynamicTemplateData: {
                     name: coordinator.firstName,
-                    student: username
+                    student
                 }
             }
 
-            (async () => {
-                try {
-                    await sgMail.send(msg)
-                } catch (err) {
-                    console.error(err)
-                }
-            })()
+            sgMail.send(msg)
 
             return article
         }

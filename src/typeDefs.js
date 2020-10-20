@@ -150,7 +150,7 @@ module.exports = gql`
 
         submitArticle(
             articleId: ID!
-            username: String!
+            student: String!
             faculty: String!
         ): Article
     }
