@@ -268,7 +268,7 @@ module.exports = {
             return newSubmission
         },
 
-        submitArticle: async (_, { articleId, username, faculty }, { Article, User }) => {
+        submitArticle: async (_, { articleId, student, faculty }, { Article, User }) => {
             const article = await Article.findOneAndUpdate(
                 // Find Submission by submissionId
                 { _id: articleId },
