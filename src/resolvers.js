@@ -36,7 +36,7 @@ module.exports = {
         ADMIN: 'admin',
         COMPSCI: 'compsci',
         HUMANITIES: 'humanities',
-        MATHEMATICS: 'math'
+        MATHEMATICS: 'mathematics'
     },
 
     Query: {
