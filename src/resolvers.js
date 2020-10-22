@@ -70,7 +70,10 @@ module.exports = {
         },
 
         getFacultyStudents: async ( _, { faculty }, { User } ) => {
-            const students = await User.find({ role: 'student', faculty: faculty })
+            const students = await User.find({
+                role: 'student',
+                faculty: faculty
+            })
 
             return students
         },
@@ -105,6 +108,7 @@ module.exports = {
 
         getUserArticles: async ( _, { userId }, { Article } ) => {
             const articles = await Article.find({ submittedBy: userId })
+            .sort({'createdDate': 'desc'})
             .populate(
                 'submittedBy academicYear messages.messageUser'
             )
@@ -113,7 +117,8 @@ module.exports = {
         },
 
         getFacultyArticles: async ( _, { faculty }, { Article } ) => {
-            const articles = await Article.find({ faculty })
+            const articles = await Article.find({ faculty, isSubmitted: true })
+            .sort({'createdDate': 'asc'})
             .populate(
                 'submittedBy academicYear messages.messageUser'
             )
@@ -124,9 +129,11 @@ module.exports = {
         getPublicationSelections: async ( _, args, { Article } ) => {
             const articles = await Article.find({
                 toBePublished: true
-            }).populate(
-                'submittedBy academicYear messages.messageUser'
-            )
+            })
+                .sort({'createdDate': 'asc'})
+                .populate(
+                    'submittedBy academicYear messages.messageUser'
+                )
 
             return articles
         }
