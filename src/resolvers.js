@@ -275,6 +275,14 @@ module.exports = {
             return newSubmission
         },
 
+        deleteArticle: async (_, { articleId }, { Article }) => {
+            const article = await Article.findOneAndRemove({
+                _id: articleId
+            })
+
+            return article
+        },
+
         submitArticle: async (_, { articleId, student, faculty }, { Article, User }) => {
             const article = await Article.findOneAndUpdate(
                 // Find Submission by submissionId
@@ -307,6 +315,54 @@ module.exports = {
             sgMail.send(msg)
 
             return article
+        },
+
+        updateArticle: async (_, { articleId, editDate, newArticle }, { Article }) => {
+            const article = await Article.findOneAndUpdate(
+                // Find Submission by submissionId
+                { _id: articleId },
+                // Update the Submission status
+                {
+                    $set: {
+                        article: newArticle,
+                        editDate
+                    }
+                },
+                // Capture the updated document
+                { new: true }
+            )
+
+            return article
+        },
+
+        addArticleMessage: async (_, { articleId, userId, messageBody }, { Article }) => {
+            const newMessage = {
+                messageBody,
+                messageUser: userId
+            }
+
+            const article = await Article.findOneAndUpdate(
+                {
+                    _id: articleId
+                },
+                // Prepend new message to array
+                {
+                    $push: {
+                        messages: {
+                            $each: [newMessage],
+                            $position: 0
+                        }
+                    }
+                },
+                // Return the updated Article
+                {
+                    new: true
+                }
+            ).populate(
+                'submittedBy academicYear messages.messageUser'
+            )
+
+            return article.messages[0]
         }
     }
 }
