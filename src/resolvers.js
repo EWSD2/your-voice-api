@@ -130,7 +130,10 @@ module.exports = {
             const articles = await Article.find({
                 toBePublished: true
             })
-                .sort({'createdDate': 'asc'})
+                .sort({
+                    'faculty': 'asc',
+                    'createdDate': 'asc'
+                })
                 .populate(
                     'submittedBy academicYear messages.messageUser'
                 )
