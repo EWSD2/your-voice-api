@@ -156,6 +156,10 @@ module.exports = gql`
             faculty: String!
         ): Article
 
+        selectForPublication(
+            articleId: ID!
+        ): Article
+
         updateArticle(
             articleId: ID!
             editDate: String!

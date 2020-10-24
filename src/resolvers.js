@@ -283,6 +283,20 @@ module.exports = {
             return article
         },
 
+        selectForPublication: async (_, { articleId }, { Article }) => {
+            const article = await Article.findOneAndUpdate(
+                { _id: articleId },
+                {
+                    $set: {
+                        toBePublished: true
+                    }
+                },
+                { new: true }
+            )
+
+            return article
+        },
+
         submitArticle: async (_, { articleId, student, faculty }, { Article, User }) => {
             const article = await Article.findOneAndUpdate(
                 // Find Submission by submissionId
